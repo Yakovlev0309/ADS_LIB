@@ -4,6 +4,8 @@
 #include <vector>
 #include <cstddef>
 
+#include "data_structure.hpp"
+
 using namespace std;
 
 template <typename T>
@@ -19,28 +21,28 @@ public:
 };
 
 template <typename T>
-class BinaryTree
+class BinaryTree : public DataStructure<T>
 {
 public:
     BinaryTree();
 
-    T* to_array_preorder();
-    void traceroute_recursive_preorder(BinaryTreeNode<T> *node, vector<T> &values);
-
-    T* to_array_inorder();
-    void traceroute_recursive_inorder(BinaryTreeNode<T> *node, vector<T> &values);
-
-    T* to_array_postorder();
-    void traceroute_recursive_postorder(BinaryTreeNode<T> *node, vector<T> &values);
-
-    // TODO сделать общий интерфейс Container, который должны реализовывать все контейнеры (структуры данных)
+    T* to_array_preorder() const;
+    void traceroute_recursive_preorder(BinaryTreeNode<T> *node, vector<T> &values) const;
+    T* to_array_inorder() const;
+    void traceroute_recursive_inorder(BinaryTreeNode<T> *node, vector<T> &values) const;
+    T* to_array_postorder() const;
+    void traceroute_recursive_postorder(BinaryTreeNode<T> *node, vector<T> &values) const;
 
     void add_node(T value);
     void remove_node(T value);
 
-    size_t size() const { return sz; }
     void traceroute_node(T value) const;
-    bool contains(T value) const;
+
+    size_t size() const override { return sz; }
+    bool is_empty() const override { return sz > 0 ? false : true; };
+    bool contains(const T& value) const override { return contains(value, root); };
+
+    T* to_array() const override { return to_array_inorder(); };
 
 private:
     void add_node(T value, BinaryTreeNode<T> *parent);
@@ -72,7 +74,7 @@ BinaryTree<T>::BinaryTree()
 }
 
 template <typename T>
-T* BinaryTree<T>::to_array_preorder()
+T* BinaryTree<T>::to_array_preorder() const
 {
     vector<T> values;
     traceroute_recursive_preorder(root, values);
@@ -85,7 +87,7 @@ T* BinaryTree<T>::to_array_preorder()
 }
 
 template <typename T>
-void BinaryTree<T>::traceroute_recursive_preorder(BinaryTreeNode<T> *node, vector<T>& values)
+void BinaryTree<T>::traceroute_recursive_preorder(BinaryTreeNode<T> *node, vector<T>& values) const
 {
     if (node != nullptr)
     {
@@ -96,7 +98,7 @@ void BinaryTree<T>::traceroute_recursive_preorder(BinaryTreeNode<T> *node, vecto
 }
 
 template <typename T>
-T* BinaryTree<T>::to_array_inorder()
+T* BinaryTree<T>::to_array_inorder() const
 {
     vector<T> values;
     traceroute_recursive_inorder(root, values);
@@ -109,7 +111,7 @@ T* BinaryTree<T>::to_array_inorder()
 }
 
 template <typename T>
-void BinaryTree<T>::traceroute_recursive_inorder(BinaryTreeNode<T> *node, vector<T> &values)
+void BinaryTree<T>::traceroute_recursive_inorder(BinaryTreeNode<T> *node, vector<T> &values) const
 {
     if (node != nullptr)
     {
@@ -120,7 +122,7 @@ void BinaryTree<T>::traceroute_recursive_inorder(BinaryTreeNode<T> *node, vector
 }
 
 template <typename T>
-T* BinaryTree<T>::to_array_postorder()
+T* BinaryTree<T>::to_array_postorder() const
 {
     vector<T> values;
     traceroute_recursive_postorder(root, values);
@@ -133,7 +135,7 @@ T* BinaryTree<T>::to_array_postorder()
 }
 
 template <typename T>
-void BinaryTree<T>::traceroute_recursive_postorder(BinaryTreeNode<T> *node, vector<T> &values)
+void BinaryTree<T>::traceroute_recursive_postorder(BinaryTreeNode<T> *node, vector<T> &values) const
 {
     if (node != nullptr)
     {
@@ -197,10 +199,9 @@ void BinaryTree<T>::traceroute_node(T value, BinaryTreeNode<T> *parent) const
 {
     if (parent == nullptr)
     {
-        // qDebug() << "There is no such value in binary tree.";
         return;
     }
-    // qDebug() << parent->value;
+    // cout << parent->value << endl;
     if (value > parent->value)
     {
         traceroute_node(value, parent->right);
@@ -213,12 +214,6 @@ void BinaryTree<T>::traceroute_node(T value, BinaryTreeNode<T> *parent) const
     {
         return;
     }
-}
-
-template <typename T>
-bool BinaryTree<T>::contains(T value) const
-{
-    return contains(value, root);
 }
 
 template <typename T>

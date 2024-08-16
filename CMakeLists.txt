@@ -17,6 +17,7 @@ add_library(ADS_LIB SHARED
   data_structures/stack.hpp
   data_structures/queue.hpp
   data_structures/binary_tree.hpp
+  data_structures/data_structure.hpp
 )
 
 target_compile_definitions(ADS_LIB PRIVATE ADS_LIB_LIBRARY)

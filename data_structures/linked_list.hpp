@@ -1,9 +1,10 @@
 #ifndef LINKEDLIST_H
 #define LINKEDLIST_H
 
-#include <cstddef>
 #include <initializer_list>
 #include <stdexcept>
+
+#include "data_structure.hpp"
 
 template <typename T>
 class LinkedListNode
@@ -18,7 +19,7 @@ public:
 };
 
 template <typename T>
-class LinkedList
+class LinkedList : public DataStructure<T>
 {
 public:
     LinkedList();
@@ -42,14 +43,14 @@ public:
 
     void clear();
 
-    size_t size() const { return sz; }
-    bool is_empty() const { return sz > 0 ? false : true; };
-    bool contains(const T& value) const;
+    size_t size() const override { return sz; }
+    bool is_empty() const override { return sz > 0 ? false : true; };
+    bool contains(const T& value) const override;
     LinkedListNode<T>* head() const { return _head; }
 
     T operator[](size_t index) const;
 
-    T* to_array() const;
+    T* to_array() const override;
 
 private:
     LinkedListNode<T>* _head;
