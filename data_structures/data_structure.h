@@ -1,5 +1,5 @@
-#ifndef DATA_STRUCTURE_HPP
-#define DATA_STRUCTURE_HPP
+#ifndef DATA_STRUCTURE_H
+#define DATA_STRUCTURE_H
 
 #include <cstddef>
 
@@ -14,4 +14,4 @@ public:
     virtual T* to_array() const = 0;
 };
 
-#endif // DATA_STRUCTURE_HPP
+#endif // DATA_STRUCTURE_H

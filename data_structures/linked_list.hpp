@@ -4,7 +4,7 @@
 #include <initializer_list>
 #include <stdexcept>
 
-#include "data_structure.hpp"
+#include "data_structure.h"
 
 template <typename T>
 class LinkedListNode

@@ -13,11 +13,11 @@ add_library(ADS_LIB SHARED
   algorithms/searchings.hpp
   algorithms/sortings.hpp
 
+  data_structures/data_structure.h
   data_structures/linked_list.hpp
   data_structures/stack.hpp
   data_structures/queue.hpp
   data_structures/binary_tree.hpp
-  data_structures/data_structure.hpp
 )
 
 target_compile_definitions(ADS_LIB PRIVATE ADS_LIB_LIBRARY)

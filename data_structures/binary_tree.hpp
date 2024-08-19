@@ -4,7 +4,7 @@
 #include <vector>
 #include <cstddef>
 
-#include "data_structure.hpp"
+#include "data_structure.h"
 
 using namespace std;
 
@@ -33,10 +33,14 @@ public:
     T* to_array_postorder() const;
     void traceroute_recursive_postorder(BinaryTreeNode<T> *node, vector<T> &values) const;
 
-    void add_node(T value);
-    void remove_node(T value);
-
     void traceroute_node(T value) const;
+
+    void add_node(T value);
+    void remove_node(T value); // TODO
+    void clear();
+    void clear(BinaryTreeNode<T>* node);
+
+    void balance_by_inorder();
 
     size_t size() const override { return sz; }
     bool is_empty() const override { return sz > 0 ? false : true; };
@@ -48,6 +52,7 @@ private:
     void add_node(T value, BinaryTreeNode<T> *parent);
     void traceroute_node(T value, BinaryTreeNode<T> *parent) const;
     bool contains(T value, BinaryTreeNode<T> *parent) const;
+    void clear_recursive(BinaryTreeNode<T>* node, vector<BinaryTreeNode<T> *> &nodes);
 
 private:
     BinaryTreeNode<T> *root;
@@ -146,6 +151,67 @@ void BinaryTree<T>::traceroute_recursive_postorder(BinaryTreeNode<T> *node, vect
 }
 
 template <typename T>
+void BinaryTree<T>::traceroute_node(T value) const
+{
+    traceroute_node(value, root);
+}
+
+template <typename T>
+void BinaryTree<T>::traceroute_node(T value, BinaryTreeNode<T> *parent) const
+{
+    if (parent == nullptr)
+    {
+        return;
+    }
+    // cout << parent->value << endl;
+    if (value > parent->value)
+    {
+        traceroute_node(value, parent->right);
+    }
+    else if (value < parent->value)
+    {
+        traceroute_node(value, parent->left);
+    }
+    else
+    {
+        return;
+    }
+}
+
+template <typename T>
+void BinaryTree<T>::clear()
+{
+    clear(root);
+    sz = 0;
+    root = nullptr;
+}
+template <typename T>
+void BinaryTree<T>::clear(BinaryTreeNode<T>* node)
+{
+    vector<BinaryTreeNode<T>*> nodes;
+    clear_recursive(node, nodes);
+    for (size_t i = 0; i < nodes.size(); ++i)
+    {
+        delete nodes[i];
+        sz--;
+    }
+    if (sz == 0)
+    {
+        root = nullptr;
+    }
+}
+template <typename T>
+void BinaryTree<T>::clear_recursive(BinaryTreeNode<T>* node, vector<BinaryTreeNode<T>*>& nodes)
+{
+    if (node != nullptr)
+    {
+        nodes.push_back(node);
+        clear_recursive(node->left, nodes);
+        clear_recursive(node->right, nodes);
+    }
+}
+
+template <typename T>
 void BinaryTree<T>::add_node(T value)
 {
     if (root == nullptr)
@@ -189,31 +255,26 @@ void BinaryTree<T>::add_node(T value, BinaryTreeNode<T> *parent)
 }
 
 template <typename T>
-void BinaryTree<T>::traceroute_node(T value) const
+void BinaryTree<T>::balance_by_inorder()
 {
-    traceroute_node(value, root);
-}
+    T* inorder_data = to_array_inorder();
 
-template <typename T>
-void BinaryTree<T>::traceroute_node(T value, BinaryTreeNode<T> *parent) const
-{
-    if (parent == nullptr)
+    size_t size = sz;
+    size_t middle = sz / 2;
+    clear();
+
+    add_node(inorder_data[middle]);
+    int i;
+    for (i = middle - 1; i >= 0; --i)
     {
-        return;
+        add_node(inorder_data[i]);
     }
-    // cout << parent->value << endl;
-    if (value > parent->value)
+    for (i = middle + 1; i < size; ++i)
     {
-        traceroute_node(value, parent->right);
+        add_node(inorder_data[i]);
     }
-    else if (value < parent->value)
-    {
-        traceroute_node(value, parent->left);
-    }
-    else
-    {
-        return;
-    }
+
+    delete[] inorder_data;
 }
 
 template <typename T>
