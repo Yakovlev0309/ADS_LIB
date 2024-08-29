@@ -224,7 +224,6 @@ void BinaryTree<T>::add_node(T value)
         add_node(value, root);
     }
 }
-
 template <typename T>
 void BinaryTree<T>::add_node(T value, BinaryTreeNode<T> *parent)
 {
@@ -240,7 +239,7 @@ void BinaryTree<T>::add_node(T value, BinaryTreeNode<T> *parent)
             add_node(value, parent->right);
         }
     }
-    else
+    else if (value < parent->value)
     {
         if (parent->left == nullptr)
         {
