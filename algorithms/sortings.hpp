@@ -3,6 +3,7 @@
 
 #include <cstddef>
 #include <algorithm>
+#include <vector>
 
 namespace Sortings
 {
@@ -23,6 +24,12 @@ template <typename T>
 void q_sort(T* arr, size_t begin, size_t end);
 template <typename T>
 void quick_sort(T* arr, size_t size);
+
+// Сортировка слиянием
+template <typename T>
+void m_sort(T* arr, size_t size, std::vector<T>& buffer, size_t l, size_t r);
+template <typename T>
+void merge_sort(T* arr, size_t size);
 }
 
 template <typename T>
@@ -108,6 +115,47 @@ void Sortings::quick_sort(T* arr, size_t size)
     if (size > 0)
     {
         q_sort(arr, 0, size - 1);
+    }
+}
+
+template <typename T>
+void Sortings::m_sort(T* arr, size_t size, std::vector<T>& buffer, size_t l, size_t r)
+{
+    if (l < r)
+    {
+        size_t mid = (l + r) / 2;
+        m_sort(arr, size, buffer, l, mid);
+        m_sort(arr, size, buffer, mid + 1, r);
+
+        size_t k = l;
+        for (size_t i = l, j = mid + 1; i <= mid || j <= r; )
+        {
+            if (j > r || (i <= mid && arr[i] < arr[j]))
+            {
+                buffer[k] = arr[i];
+                ++i;
+            }
+            else
+            {
+                buffer[k] = arr[j];
+                ++j;
+            }
+            ++k;
+        }
+
+        for (; l <= r; ++l)
+        {
+            arr[l] = buffer[l];
+        }
+    }
+}
+template <typename T>
+void Sortings::merge_sort(T* arr, size_t size)
+{
+    if (size > 0)
+    {
+        std::vector<T> buffer(size);
+        m_sort(arr, size, buffer, 0, size - 1);
     }
 }
 
