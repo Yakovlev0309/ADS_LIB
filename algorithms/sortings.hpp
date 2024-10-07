@@ -14,6 +14,10 @@ void bubble_sort(T* arr, size_t size);
 template <typename T>
 void selection_sort(T* arr, size_t size);
 
+// Сортировка вставками
+template <typename T>
+void insertion_sort(T* arr, size_t size);
+
 // Быстрая сортировка
 template <typename T>
 void q_sort(T* arr, size_t begin, size_t end);
@@ -53,6 +57,22 @@ void Sortings::selection_sort(T* arr, size_t size)
         {
             std::swap(arr[i], arr[min_index]);
         }
+    }
+}
+
+template <typename T>
+void Sortings::insertion_sort(T* arr, size_t size)
+{
+    for (size_t i = 1; i < size; ++i)
+    {
+        int next = arr[i];
+        size_t j = i;
+        while (j > 0 && arr[j - 1] > next)
+        {
+            arr[j] = arr[j - 1];
+            --j;
+        }
+        arr[j] = next;
     }
 }
 
